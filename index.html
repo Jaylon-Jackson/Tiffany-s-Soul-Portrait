@@ -198,8 +198,9 @@ footer{position:relative;z-index:1;text-align:center;padding:4rem 2rem 3rem;bord
 footer .footer-logo{font-family:"Cinzel Decorative",serif;font-size:1.2rem;color:var(--gold);margin-bottom:.5rem}
 footer p{font-family:"DM Mono",monospace;font-size:.6rem;color:rgba(201,148,58,.3);letter-spacing:.2em}
 
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
-.reveal.visible{opacity:1;transform:translateY(0)}
+.reveal{opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease}
+.js-ready .reveal{opacity:0;transform:translateY(20px)}
+.js-ready .reveal.visible{opacity:1;transform:translateY(0)}
 
 
 .spread-photo-wrap{position:relative;border-radius:4px;overflow:hidden;border:1px solid rgba(201,148,58,.18);cursor:zoom-in;background:var(--ink)}
@@ -221,7 +222,8 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
 /* Reduced motion */
 @media(prefers-reduced-motion:reduce){
   .star,.scroll-line{animation:none!important}
-  .hero-eyebrow,.hero-greeting,.hero-name,.hero-sub,.hero-date-pill,.scroll-cue{opacity:1!important;transform:none!important;animation:none!important}
+  .hero-eyebrow,.hero-greeting,.hero-name,.hero-sub,.hero-date-pill,.scroll-cue,
+  .reveal,.js-ready .reveal{opacity:1!important;transform:none!important;animation:none!important}
 }
 
 /* Mobile */
@@ -776,12 +778,18 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
   }
 })();
 
-// Reveal on scroll
+// Reveal on scroll — only hide elements if JS is running fast enough
 (function(){
+  // Mark body so CSS knows JS is active
+  document.body.classList.add('js-ready');
   const obs=new IntersectionObserver(entries=>{
     entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible')}});
-  },{threshold:.12});
+  },{threshold:0.05, rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  // Safety net: after 3s, force all reveals visible regardless
+  setTimeout(()=>{
+    document.querySelectorAll('.reveal:not(.visible)').forEach(el=>el.classList.add('visible'));
+  }, 3000);
 })();
 </script>
 </body>
