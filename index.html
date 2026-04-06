@@ -212,8 +212,86 @@ footer p{font-family:"DM Mono",monospace;font-size:.6rem;color:rgba(201,148,58,.
 a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline-offset:4px}
 
 /* Print */
-@media print{
-  .starfield,nav,.scroll-cue,.save-banner{display:none!important}
+@media print {
+  /* Hide decorative and interactive elements */
+  .starfield, nav, .scroll-cue, .save-banner, .archive-banner,
+  .archive-overlay, .hero-date-pill, .scroll-line, .caption-tap,
+  .zoom-overlay, .zoom-close, footer button, .pdf-btn { display: none !important; }
+
+  /* White canvas */
+  html, body { background: #fff !important; }
+
+  /* Override ALL CSS variable colours + rgba tints → readable dark text.
+     We target every named class that carries colour so nothing is missed. */
+  body, p, h1, h2, h3, h4, h5, h6, li, td, th, span, div,
+  strong, em, blockquote, figcaption, time, label, a,
+  .section-tag, .layer-info, .layer-number, .layer-kicker, .layer-title,
+  .hero-greeting, .hero-sub, .hero-eyebrow, .hero-name,
+  .reader-bio, .reader-bio p, .reading-section, .reading-section p,
+  .reading-section h3, .reading-section h4, .reading-block,
+  .guidebook, .guidebook p, .callout, .callout p,
+  .primer-card, .primer-card p, .before-inner, .before-inner p,
+  .central-pair, .central-pair p, .kipper-grid-note p,
+  .deck-badge, .nav-logo, .footer-logo, .save-text, .sig-inner p,
+  .overview-list li, .kipper-layout li, .mini-card, .framed-title,
+  .inner-cards, .card-line, .card-line em, .pair-cards,
+  .section-header, .caption-bar, .caption-label {
+    color: #1a1a1a !important;
+    text-shadow: none !important;
+    background-color: transparent !important;
+  }
+
+  /* Slightly lighter for secondary labels */
+  .deck-badge, .section-tag, .guidebook p,
+  .card-line, .caption-label { color: #444 !important; }
+
+  /* Images: force render + full width */
+  img {
+    display: block !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    height: auto !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+    color-adjust: exact !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* Spread containers – remove overflow:hidden so images show */
+  .spread-photo-wrap, figure.spread, .spread, .zoomable {
+    overflow: visible !important;
+    border: 1px solid #ccc !important;
+    border-radius: 0 !important;
+    cursor: default !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    background: transparent !important;
+  }
+
+  /* Force all reveal elements visible */
+  .reveal, .reveal.visible { opacity: 1 !important; transform: none !important; }
+
+  /* Kill animations */
+  * { animation: none !important; transition: none !important; }
+
+  /* Hero */
+  .hero, .hero-inner { min-height: auto !important; padding: 2rem !important; }
+
+  /* Section breaks */
+  .reading-block, .reading-section, article, section { break-inside: avoid; page-break-inside: avoid; }
+
+  /* Callout boxes */
+  .callout { border-left: 2px solid #888 !important; background: #f9f9f9 !important; }
+
+  /* Tables */
+  .pairs-table th, .pairs-table td { color: #1a1a1a !important; border-color: #ddd !important; }
+
+  /* Footer */
+  footer { border-top: 1px solid #ddd !important; }
+}
   body{background:#fff!important;color:#000!important}
   * {animation:none!important;opacity:1!important}
   .hero{min-height:auto;padding:2rem}
@@ -236,9 +314,142 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
   .nav-links a{font-size:.6rem}
   .save-inner{flex-direction:column;text-align:center}
 }
+
+/* ── Archive countdown banner ── */
+.archive-banner {
+  position: relative;
+  z-index: 200;
+  background: rgba(201,148,58,0.07);
+  border-bottom: 1px solid rgba(201,148,58,0.2);
+  padding: 0.7rem 2rem;
+  text-align: center;
+}
+.archive-banner-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.archive-banner-msg {
+  font-family: "DM Mono", monospace;
+  font-size: 0.58rem;
+  color: rgba(245,240,232,0.6);
+  letter-spacing: 0.12em;
+}
+.archive-banner-timer {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 0.95rem;
+  color: var(--gold);
+  letter-spacing: 0.1em;
+  flex-shrink: 0;
+}
+.archive-banner-btn {
+  font-family: "DM Mono", monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: transparent;
+  border: 1px solid rgba(201,148,58,0.35);
+  padding: 0.38rem 0.9rem;
+  border-radius: 2px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+.archive-banner-btn:hover { background: rgba(201,148,58,0.1); border-color: var(--gold); }
+
+/* ── Archive overlay ── */
+.archive-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(14,12,10,0.97);
+  align-items: center;
+  justify-content: center;
+}
+.archive-overlay.visible { display: flex; }
+.archive-box {
+  max-width: 460px;
+  text-align: center;
+  padding: 3rem 2.5rem;
+  border: 1px solid rgba(201,148,58,0.3);
+  border-radius: 4px;
+  background: rgba(14,12,10,0.9);
+}
+.archive-glyph {
+  color: var(--gold);
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.5;
+  letter-spacing: 0.4em;
+}
+.archive-title {
+  font-family: "Cinzel Decorative", serif;
+  font-size: 1rem;
+  color: var(--gold);
+  letter-spacing: 0.12em;
+  margin-bottom: 1.2rem;
+}
+.archive-msg {
+  font-family: "DM Mono", monospace;
+  font-size: 0.68rem;
+  color: rgba(245,240,232,0.65);
+  letter-spacing: 0.08em;
+  line-height: 1.85;
+  margin-bottom: 2rem;
+}
+.archive-btn {
+  font-family: "DM Mono", monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--gold);
+  border: none;
+  padding: 0.9rem 2rem;
+  border-radius: 2px;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  margin-bottom: 0.8rem;
+  transition: background 0.2s;
+}
+.archive-btn:hover { background: var(--gold-light); }
+.archive-note {
+  font-family: "DM Mono", monospace;
+  font-size: 0.52rem;
+  color: rgba(201,148,58,0.35);
+  letter-spacing: 0.15em;
+  margin: 0;
+}
+
 </style>
 </head>
 <body>
+<!-- Archive countdown banner -->
+<div class="archive-banner" id="archiveBanner">
+  <div class="archive-banner-inner">
+    <span class="archive-banner-msg">This reading will be archived on April 11 — download your copy to keep it.</span>
+    <span class="archive-banner-timer" id="archiveTimer">5d 0h</span>
+    <button class="archive-banner-btn" onclick="window.print()">Download Now</button>
+  </div>
+</div>
+<!-- Archive overlay -->
+<div class="archive-overlay" id="archiveOverlay">
+  <div class="archive-box">
+    <div class="archive-glyph">◆ ◆ ◆</div>
+    <h2 class="archive-title">This Reading Has Closed</h2>
+    <p class="archive-msg">This reading has temporarily gone offline. Reach out if you have questions or would like to book a new session.</p>
+    <button class="archive-btn" onclick="window.print()">Download Your Reading</button>
+    <p class="archive-note">Open your browser's print dialog → choose Save as PDF.</p>
+  </div>
+</div>
+
 <div class="starfield" id="starfield"></div>
 
 <nav aria-label="Section navigation">
@@ -757,7 +968,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
       <strong>Save Your Reading</strong>
       This reading is a living document. Save or screenshot to keep it.
     </div>
-    <button class="save-btn" type="button" onclick="window.print()">Save as PDF</button>
+    <button class="save-btn" type="button" onclick="window.print()">Download as PDF</button>
   </div>
 </div>
 
@@ -790,6 +1001,34 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
   setTimeout(()=>{
     document.querySelectorAll('.reveal:not(.visible)').forEach(el=>el.classList.add('visible'));
   }, 3000);
+})();
+
+// Archive countdown
+(function() {
+  const expiry = new Date("2026-04-11T23:59:59").getTime();
+  const overlay = document.getElementById('archiveOverlay');
+  const banner  = document.getElementById('archiveBanner');
+  const timer   = document.getElementById('archiveTimer');
+  function tick() {
+    const rem = expiry - Date.now();
+    if (rem <= 0) {
+      if (overlay) overlay.classList.add('visible');
+      if (banner)  banner.style.display = 'none';
+      return;
+    }
+    if (timer) {
+      const d = Math.floor(rem / 86400000);
+      const h = Math.floor((rem % 86400000) / 3600000);
+      timer.textContent = d + 'd ' + h + 'h';
+    }
+  }
+  if (Date.now() >= expiry) {
+    if (overlay) overlay.classList.add('visible');
+    if (banner)  banner.style.display = 'none';
+  } else {
+    tick();
+    setInterval(tick, 60000);
+  }
 })();
 </script>
 </body>
