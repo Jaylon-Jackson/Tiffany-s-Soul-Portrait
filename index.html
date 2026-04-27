@@ -352,7 +352,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
 <!-- Archive countdown banner -->
 <div class="archive-banner" id="archiveBanner">
   <div class="archive-banner-inner">
-    <span class="archive-banner-msg">This reading will be archived on April 11 — download your copy to keep it.</span>
+    <span class="archive-banner-msg">This reading will be archived on May 11 — download your copy to keep it.</span>
     <span class="archive-banner-timer" id="archiveTimer">5d 0h</span>
     <button class="archive-banner-btn" onclick="window.print()">Download Now</button>
   </div>
@@ -923,7 +923,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
 
 // Archive countdown
 (function() {
-  const expiry = new Date("2027-04-11T23:59:59").getTime();
+  const expiry = new Date("2026-05-11T23:59:59").getTime();
   const overlay = document.getElementById('archiveOverlay');
   const banner  = document.getElementById('archiveBanner');
   const timer   = document.getElementById('archiveTimer');
