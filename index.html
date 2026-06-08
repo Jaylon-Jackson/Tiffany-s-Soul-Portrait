@@ -349,22 +349,10 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
 </style>
 </head>
 <body>
-<!-- Archive countdown banner -->
+<!-- Gentle welcome banner -->
 <div class="archive-banner" id="archiveBanner">
   <div class="archive-banner-inner">
-    <span class="archive-banner-msg">This reading will be archived on May 11 — download your copy to keep it.</span>
-    <span class="archive-banner-timer" id="archiveTimer">5d 0h</span>
-    <button class="archive-banner-btn" onclick="window.print()">Download Now</button>
-  </div>
-</div>
-<!-- Archive overlay -->
-<div class="archive-overlay" id="archiveOverlay">
-  <div class="archive-box">
-    <div class="archive-glyph">◆ ◆ ◆</div>
-    <h2 class="archive-title">This Reading Has Closed</h2>
-    <p class="archive-msg">This reading has temporarily gone offline. Reach out if you have questions or would like to book a new session.</p>
-    <button class="archive-btn" onclick="window.print()">Download Your Reading</button>
-    <p class="archive-note">Open your browser's print dialog → choose Save as PDF.</p>
+    <span class="archive-banner-msg">I understand that life can be busy for the girlies — so read at your pace. ♡</span>
   </div>
 </div>
 
@@ -879,17 +867,6 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
   </div>
 </div>
 
-<!-- SAVE BANNER -->
-<div class="save-banner">
-  <div class="save-inner">
-    <div class="save-text">
-      <strong>Save Your Reading</strong>
-      This reading is a living document. Save or screenshot to keep it.
-    </div>
-    <button class="save-btn" type="button" onclick="window.print()">Download as PDF</button>
-  </div>
-</div>
-
 <footer>
   <div class="footer-logo">J</div>
   <p>This reading was prepared just for you, Tiffany &nbsp;·&nbsp; Soul Portrait &nbsp;·&nbsp; April 2026 &nbsp;·&nbsp; Prepared by Jaylon</p>
@@ -921,33 +898,7 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--gold-light);outline
   }, 3000);
 })();
 
-// Archive countdown
-(function() {
-  const expiry = new Date("2026-05-11T23:59:59").getTime();
-  const overlay = document.getElementById('archiveOverlay');
-  const banner  = document.getElementById('archiveBanner');
-  const timer   = document.getElementById('archiveTimer');
-  function tick() {
-    const rem = expiry - Date.now();
-    if (rem <= 0) {
-      if (overlay) overlay.classList.add('visible');
-      if (banner)  banner.style.display = 'none';
-      return;
-    }
-    if (timer) {
-      const d = Math.floor(rem / 86400000);
-      const h = Math.floor((rem % 86400000) / 3600000);
-      timer.textContent = d + 'd ' + h + 'h';
-    }
-  }
-  if (Date.now() >= expiry) {
-    if (overlay) overlay.classList.add('visible');
-    if (banner)  banner.style.display = 'none';
-  } else {
-    tick();
-    setInterval(tick, 60000);
-  }
-})();
+// Archive countdown removed — this reading stays open indefinitely.
 </script>
 </body>
 </html>
